@@ -29,17 +29,20 @@ public class ConnectDatabase {
     public ConnectDatabase() {
         try {
             con = DriverManager.getConnection(url, user, password);
-            System.out.println("Connect success");
-        } catch (SQLException throwables) {
-            System.out.println("connect error: " + throwables.getMessage());
+            System.out.println("Connecting success");
+        } catch (SQLException e) {
+            System.out.println("Connect Error: " + e.getMessage());
         }
     }
     
     public void insertProductType(String typeNameProduct) {
-        String query = "insert into LoaiSanPham value(?)";
+        String query = "insert into LoaiSanPham values(?)";
         try {
             PreparedStatement preparedStatement = con.prepareStatement(query);
+            preparedStatement.setString(1,typeNameProduct);
+            preparedStatement.execute();
         } catch (Exception e) {
+            System.out.println("insertProductType Error: " + e.getMessage());
         }
     }
     
@@ -54,8 +57,8 @@ public class ConnectDatabase {
                 break;
             }
             statement.close();
-        } catch (SQLException throwables) {
-            System.out.println("getNameProduct Error: " + throwables.getMessage());
+        } catch (SQLException e) {
+            System.out.println("getNameProduct Error: " + e.getMessage());
         }
         return result;
     }
@@ -74,8 +77,8 @@ public class ConnectDatabase {
                 int MaLoaiSP = resultSet.getInt("MaLoaiSP");
                 products.add(new SanPham(MaSP, TenSanPham, NhaSanXuat, getNameProduct(MaLoaiSP)));
             }
-        } catch (SQLException throwables) {
-            System.out.println("products Error: " + throwables.getMessage());
+        } catch (SQLException e) {
+            System.out.println("products Error: " + e.getMessage());
         }
         return products;
     }
@@ -92,8 +95,8 @@ public class ConnectDatabase {
                 listProductType.add(new LoaiSanPham(MaLoaiSP, TenLoaiSP));
             }
             statement.close();
-        } catch (SQLException throwables) {
-            System.out.println("error: " + throwables.getMessage());
+        } catch (SQLException e) {
+            System.out.println("listProductType Error: " + e.getMessage());
         }
         return listProductType;
     }
